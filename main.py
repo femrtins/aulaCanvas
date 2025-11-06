@@ -9,7 +9,6 @@ HEIGHT = 800
 
 input_handler = InputHandler(canvas)
 
-# 📦 Callbacks GLUT
 def display_callback():
     canvas.showScreen(WIDHT, HEIGHT)
 
@@ -28,13 +27,11 @@ def motion_callback(x, y):
 def passive_motion_callback(x, y):
     input_handler.onPassiveMotion(x, y)
 
-# 🪟 Inicializa GLUT
 glutInit(sys.argv)
 glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
 glutInitWindowSize(WIDHT, HEIGHT)
 glutCreateWindow(b"Canvas")
 
-# 🔗 Registra os callbacks
 glutDisplayFunc(display_callback)
 glutReshapeFunc(reshape_callback)
 glutKeyboardFunc(keyboard_callback)
@@ -42,5 +39,4 @@ glutMouseFunc(mouse_callback)
 glutMotionFunc(motion_callback)
 glutPassiveMotionFunc(passive_motion_callback)
 
-# 🚀 Inicia o loop principal
 glutMainLoop()

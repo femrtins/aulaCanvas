@@ -9,13 +9,26 @@ class Rectangle(Geometry):
         self.type = "Rec"
        
     def draw(self):
-        glBegin(GL_QUADS)
+        cx = self.x0 + self.width / 2.0
+        cy = self.y0 + self.height / 2.0
+        
+        w_half = self.width / 2.0
+        h_half = self.height / 2.0
+
+        glPushMatrix()  
+        
+        glTranslatef(cx, cy, 0)
+        glRotatef(self.angle, 0, 0, 1) 
+        
+        glBegin(GL_LINE_LOOP) 
         glColor3f(*self.color)
-        glVertex2f(self.x0, self.y0)
-        glVertex2f(self.x0 + self.width, self.y0)
-        glVertex2f(self.x0 + self.width, self.y0 + self.height)
-        glVertex2f(self.x0, self.y0 + self.height)
+        glVertex2f(-w_half, -h_half) # Canto inferior-esquerdo local
+        glVertex2f( w_half, -h_half) # Canto inferior-direito local
+        glVertex2f( w_half,  h_half) # Canto superior-direito local
+        glVertex2f(-w_half,  h_half) # Canto superior-esquerdo local
         glEnd()
+        
+        glPopMatrix()
         
     def draw_open(self):
         glLineStipple(5, 0xAAAA)
@@ -27,6 +40,15 @@ class Rectangle(Geometry):
         glVertex2f(self.x0 + self.width, self.y0 + self.height)
         glVertex2f(self.x0, self.y0 + self.height)
         glEnd()
+        glDisable(GL_LINE_STIPPLE)
          
     def contains_point(self, x, y):
-        pass
+        # Encontra as coordenadas reais dos cantos
+        x_min = min(self.x0, self.x0 + self.width)
+        x_max = max(self.x0, self.x0 + self.width)
+        
+        y_min = min(self.y0, self.y0 + self.height)
+        y_max = max(self.y0, self.y0 + self.height)
+
+        # Retorna True apenas se o ponto estiver dentro dos limites
+        return (x_min <= x <= x_max) and (y_min <= y <= y_max)

@@ -7,12 +7,20 @@ class Polyline(Geometry):
         self.points = points
         
     def draw(self):
+        cx, cy = self.x0, self.y0
+        glPushMatrix()
+        glTranslatef(cx, cy, 0)
+        glRotatef(self.angle, 0, 0, 1)
+        
+
         glColor3f(*self.color)
         glDisable(GL_LINE_STIPPLE)
         glBegin(GL_LINE_LOOP)
         for (x, y) in self.points:
-            glVertex2f(x, y)
+            glVertex2f(x - cx, y - cy)
         glEnd()
+        
+        glPopMatrix()
 
     def draw_open(self):
         glLineStipple(5, 0xAAAA)

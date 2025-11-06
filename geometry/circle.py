@@ -20,16 +20,22 @@ class Circle(Geometry):
     
     
     def draw(self):
+        glPushMatrix()
+        
+        glTranslatef(self.x0, self.y0, 0)
+        glRotatef(self.angle, 0, 0, 1)
+        
         glLineWidth(1)
         glDisable(GL_LINE_STIPPLE)
         glBegin(GL_LINE_LOOP)   
-    
         glColor3f(*self.color)
         for i in range(0,360):
-            px = self.x0 + math.cos(i * math.pi/180) * self.radius
-            py = self.y0 + math.sin(i * math.pi/180) * self.radius 
+            px = math.cos(i * math.pi/180) * self.radius
+            py = math.sin(i * math.pi/180) * self.radius 
             glVertex2f(px,py)
         glEnd()
+        
+        glPopMatrix()
         
     def draw_open(self):
         glLineStipple(5, 0xAAAA)
