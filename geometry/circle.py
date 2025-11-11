@@ -14,7 +14,6 @@ class Circle(Geometry):
     def perimeter(self):
         return 2 * math.pi * self.radius
     
-    
     def reescale(self, factor):
         radius = radius * factor
     
@@ -49,10 +48,12 @@ class Circle(Geometry):
         glEnd()
         
     def contains_point(self, x, y):
-        if (self.x0 - x) ** 2 + (self.y0 - y) ** 2 <= self.radius:
-            self.is_selected = True
+        
+        radius = self.radius ** 2
+        if (self.x0 - x) ** 2 + (self.y0 - y) ** 2 <= radius:
+            # self.is_selected = True
             return True
-        self.is_selected = False
+        # self.is_selected = False
         return False
     
     

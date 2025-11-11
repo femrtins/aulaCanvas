@@ -1,11 +1,13 @@
 from utils.glut_utils import *
 from geometry.geometry import Geometry
+import math
 
 class Polyline(Geometry):
     def __init__(self, color, points):
         super().__init__(points[0][0], points[0][1], color)
         self.points = points
-        
+    
+    
     def draw(self):
         cx, cy = self.x0, self.y0
         glPushMatrix()

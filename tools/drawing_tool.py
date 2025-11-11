@@ -16,8 +16,7 @@ class DrawingTool(Tool):
         self.points = []
 
     def activate(self):
-        """Chamado quando o InputHandler ativa esta ferramenta"""
-        
+       
         self.started = False
         self.points = []
         self.canvas.temp_geometry = None
@@ -93,9 +92,7 @@ class DrawingTool(Tool):
             geometry = self.make_line(x, y) 
             self.canvas.temp_geometry = geometry 
             glutPostRedisplay()
-
-    # --- Métodos helper  ---
-    
+  
     def start(self, x, y):
         self.start_x = x
         self.start_y = y

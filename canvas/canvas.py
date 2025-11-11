@@ -11,6 +11,7 @@ class Canvas:
         self.other_temp_geometry = None
         self.selection_box = None
         
+        self.color = []
         self.buttons = []
         self.mouse_pressed = False
         self.start_mouse_pos = None
@@ -42,7 +43,7 @@ class Canvas:
         
         """
         # limpa cor e profundidade
-        glClearColor(1, 1, 1, 1.0)  # Define a cor de fundo
+        glClearColor(0.9, 0.9, 0.9, 1.0)  
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         self.configure_visualization(width, height)    
         
@@ -52,7 +53,8 @@ class Canvas:
             self.other_temp_geometry.draw_open() 
         if self.selection_box != None:
             self.selection_box.draw()
-            
+        if self.color:
+            self.color.draw()  
             
         if hasattr(self, "selection_tool") and self.selection_tool.selected_geometry:
             self.selection_tool.draw_bounding_box()
@@ -61,7 +63,8 @@ class Canvas:
         for geometry in self.geometries:
             geometry.draw()
         
-        
+
+            
                     
         glutSwapBuffers()
 

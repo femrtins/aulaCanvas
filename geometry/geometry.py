@@ -12,23 +12,28 @@ class Geometry:
     
     def draw_open(self):
         pass
+
+    def area(self):
+        pass
+    
+    def perimeter(self):
+        pass
     
     def contains_point(self, x, y):
-        # Implementação do algoritmo Ray-Casting (Ponto em Polígono)
         n = len(self.points)
         inside = False
         
-        p1x, p1y = self.points[0]
+        x1, y1 = self.points[0]
         for i in range(n + 1):
-            p2x, p2y = self.points[i % n]
-            if y > min(p1y, p2y):
-                if y <= max(p1y, p2y):
-                    if x <= max(p1x, p2x):
-                        if p1y != p2y:
-                            xinters = (y - p1y) * (p2x - p1x) / (p2y - p1y) + p1x
-                        if p1x == p2x or x <= xinters:
+            x2, y2 = self.points[i % n]
+            if y > min(y1, y2):
+                if y <= max(y1, y2):
+                    if x <= max(x1, x2):
+                        if y1 != y2:
+                            inters = (y - y1) * (x2 - x1) / (y2 - y1) + x1
+                        if x1 == x2 or x <= inters:
                             inside = not inside
-            p1x, p1y = p2x, p2y
+            x1, y1 = x2, y2
             
         self.is_selected = inside
         return inside

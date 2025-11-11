@@ -7,6 +7,12 @@ class Rectangle(Geometry):
         self.height = height
         self.width = width 
         self.type = "Rec"
+        
+    def area(self):
+        return self.height * self.width
+    
+    def perimeter(self):
+        return self.height*2 + self.width*2
        
     def draw(self):
         cx = self.x0 + self.width / 2.0
@@ -19,13 +25,13 @@ class Rectangle(Geometry):
         
         glTranslatef(cx, cy, 0)
         glRotatef(self.angle, 0, 0, 1) 
-        
+        glDisable(GL_LINE_STIPPLE)
         glBegin(GL_LINE_LOOP) 
         glColor3f(*self.color)
-        glVertex2f(-w_half, -h_half) # Canto inferior-esquerdo local
-        glVertex2f( w_half, -h_half) # Canto inferior-direito local
-        glVertex2f( w_half,  h_half) # Canto superior-direito local
-        glVertex2f(-w_half,  h_half) # Canto superior-esquerdo local
+        glVertex2f(-w_half, -h_half) 
+        glVertex2f( w_half, -h_half) 
+        glVertex2f( w_half,  h_half) 
+        glVertex2f(-w_half,  h_half) 
         glEnd()
         
         glPopMatrix()
@@ -43,12 +49,10 @@ class Rectangle(Geometry):
         glDisable(GL_LINE_STIPPLE)
          
     def contains_point(self, x, y):
-        # Encontra as coordenadas reais dos cantos
         x_min = min(self.x0, self.x0 + self.width)
         x_max = max(self.x0, self.x0 + self.width)
         
         y_min = min(self.y0, self.y0 + self.height)
         y_max = max(self.y0, self.y0 + self.height)
 
-        # Retorna True apenas se o ponto estiver dentro dos limites
         return (x_min <= x <= x_max) and (y_min <= y <= y_max)

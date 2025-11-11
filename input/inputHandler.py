@@ -49,6 +49,7 @@ class InputHandler:
                 self.drawing_tool.shape = "circle"
             elif key == b'p':
                 self.drawing_tool.shape = "polyline"
+
             # Ativa a ferramenta de desenho
             self.drawing_tool.activate()
 
@@ -71,6 +72,20 @@ class InputHandler:
                 except Exception:
                     os._exit(0)
             return
+    
+        elif key == b'+':  
+            self.canvas.left *= 0.9
+            self.canvas.right *= 0.9
+            self.canvas.bottom *= 0.9
+            self.canvas.top *= 0.9
+            glutPostRedisplay()
+            
+        elif key == b'-': 
+            self.canvas.left *= 1.1
+            self.canvas.right *= 1.1
+            self.canvas.bottom *= 1.1
+            self.canvas.top *= 1.1
+            glutPostRedisplay()
 
         self.set_active_tool(key_lower)
             
