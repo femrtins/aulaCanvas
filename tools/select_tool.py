@@ -6,7 +6,7 @@ from tools.color import Color
 class SelectTool(Tool):
     def __init__(self, canvas ):
         super().__init__(canvas)
-        self.selected_geometry = []
+        self.selected_geometry = None
         self.mode = 'translate' 
         self.start_x = None
         self.start_y = None
@@ -25,54 +25,24 @@ class SelectTool(Tool):
         self.deselect_geometry()
 
     def deselect_geometry(self):
-        self.selected_geometry = []
+        self.selected_geometry = None
         self.canvas.selection_box = None
         self.is_dragging = False
         glutPostRedisplay()
 
     def select_geometry(self, x, y, add=False, toggle=False):
         """Tenta selecionar uma geometria em (x, y)."""
-        # self.deselect_geometry() 
+        self.deselect_geometry() 
         
-        # # for da lista das geometrias com reversed 
-        # for geometry in reversed(self.canvas.geometries):
-        #     if geometry.contains_point(x, y):
-        #         self.selected_geometry.append(geometry)
-        #         self.canvas.selection_box = SelectionBox(geometry)
-        #         glutPostRedisplay()
-        #         return True
-        
-        # return False
-        
-        hit = None
+        # for da lista das geometrias com reversed 
         for geometry in reversed(self.canvas.geometries):
             if geometry.contains_point(x, y):
-                hit = geometry
-                break
-
-        if not hit:
-            # nothing hit
-            if not add and not toggle:
-                # replace selection with none
-                self.deselect_geometry()
-            return False
-
-        if toggle:
-            if hit in self.selected_geometries:
-                self.selected_geometries.remove(hit)
-            else:
-                self.selected_geometries.append(hit)
-        elif add:
-            if hit not in self.selected_geometries:
-                self.selected_geometries.append(hit)
-        else:
-            # replace selection
-            self.selected_geometries = [hit]
-
-        # update selection box (combined for all selected)
-        self.canvas.selection_box = SelectionBox(self.selected_geometries)
-        glutPostRedisplay()
-        return True
+                self.selected_geometry =geometry
+                self.canvas.selection_box = SelectionBox(geometry)
+                glutPostRedisplay()
+                return True
+        
+        return False
 
     def onKeyboard(self, key, x, y):
         """Define o modo de transformação."""
@@ -108,50 +78,20 @@ class SelectTool(Tool):
             self._paint(x,y)
             return
 
-        if state == GLUT_DOWN :
-            # check modifier for multi-selection (Shift)
-            mods = glutGetModifiers()
-            shift = bool(mods & GLUT_ACTIVE_SHIFT)
-
-            # toggle with Ctrl? (optional)
-            ctrl = bool(mods & GLUT_ACTIVE_CTRL)
-
-            # If shift -> add, if ctrl -> toggle, else replace
-            if shift:
-                hit = self.select_geometry(x, y, add=True)
-            elif ctrl:
-                hit = self.select_geometry(x, y, toggle=True)
+        if state == GLUT_DOWN:
+            hit_geometry = False
+            # Verifica se clicou em um objeto já selecionado
+            if self.selected_geometry and self.selected_geometry.contains_point(x, y):
+                hit_geometry = True
             else:
-                hit = self.select_geometry(x, y, add=False, toggle=False)
+                # Se não, tenta selecionar um novo
+                hit_geometry = self.select_geometry(x, y)
 
-            # start dragging if clicked on a selected geometry
-            if hit:
-                # if the clicked geometry is selected (already ensured), start drag
+            if hit_geometry:
                 self.is_dragging = True
                 self.start_x = x
                 self.start_y = y
-            else:
-                # clicked empty area -> deselect (unless shift/ctrl were used)
-                if not (shift or ctrl):
-                    self.deselect_geometry()
 
-        # elif state == GLUT_DOWN :
-        #     hit_geometry = False
-            # Verifica se clicou em um objeto já selecionado
-        
-        
-            
-            # if self.selected_geometry and self.selected_geometry.contains_point(x, y):
-            #     hit_geometry = True
-            # else:
-            #     # Se não, tenta selecionar um novo
-            #     hit_geometry = self.select_geometry(x, y)
-
-            # if hit_geometry:
-            #     self.is_dragging = True
-            #     self.start_x = x
-            #     self.start_y = y
-             
         elif state == GLUT_UP:
             self.is_dragging = False
             self.start_x = None
